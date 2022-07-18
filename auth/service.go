@@ -24,6 +24,7 @@ func (s *jwtService) GenerateToken(userID int) (string, error) {
 	claim := jwt.MapClaims{}
 	claim["user_id"] = userID
 
+	// header and payload
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 
 	signedToken, err := token.SignedString(SECRET_KEY)
