@@ -75,3 +75,17 @@ CREATE TABLE `users` (
 
 
 SELECT * FROM users;
+SELECT * FROM campaigns;
+
+
+INSERT INTO campaigns (user_id, name, short_description, description, perks, backer_count, goal_amount, current_amount, slug, created_at, updated_at)
+VALUES (3, "tolong", "tolong", "tolong", "mantap", 100, 100000, 2500, "bagus,banget,haha", NOW(), NOW());
+
+INSERT INTO campaigns (user_id, name, short_description, description, perks, backer_count, goal_amount, current_amount, slug, created_at, updated_at)
+VALUES (1, "Campaign 2", "tolong", "tolong", "mantap", 100, 100000, 2500, "bagus,banget,haha", NOW(), NOW());
+
+INSERT INTO campaign_images (campaign_id, file_name, is_primary, created_at, updated_at)
+VALUES (2, "dummy.jpg", 0, NOW(), NOW());
+
+INSERT INTO campaign_images (campaign_id, file_name, is_primary, created_at, updated_at)
+VALUES (2, "dummy1.jpg", 1, NOW(), NOW());

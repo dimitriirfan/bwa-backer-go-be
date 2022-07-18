@@ -2,6 +2,7 @@ package main
 
 import (
 	"backer/auth"
+	"backer/campaign"
 	"backer/handler"
 	"backer/helper"
 	"backer/user"
@@ -41,6 +42,20 @@ func main() {
 	authService := auth.NewService()
 
 	userHandler := handler.NewUserHandler(userService, authService)
+
+	campaignRepository := campaign.NewRepository(db)
+
+	campaigns, err := campaignRepository.FindByCampaignID(2)
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(campaigns)
+
+		if len(campaigns.CampaignImages) > 0 {
+			fmt.Println(campaigns.CampaignImages[0].FileName)
+		}
+	}
 
 	userService.SaveAvatar(1, "images/1-profile.png")
 
