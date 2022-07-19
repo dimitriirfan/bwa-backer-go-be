@@ -41,21 +41,11 @@ func main() {
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 
-	userHandler := handler.NewUserHandler(userService, authService)
-
 	campaignRepository := campaign.NewRepository(db)
 	campaignService := campaign.NewService(campaignRepository)
 
-	campaigns, err := campaignService.FindCampaigns(3)
-
-	fmt.Println(len(campaigns))
-	if err != nil {
-		fmt.Println(1)
-	} else {
-		for _, campaign := range campaigns {
-			fmt.Println(campaign.Name)
-		}
-	}
+	userHandler := handler.NewUserHandler(userService, authService)
+	campaignHandler := handler.NewCampaignHandler(campaignService)
 
 	router := gin.Default()
 
@@ -65,6 +55,8 @@ func main() {
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
+
+	api.GET("/campaigns", campaignHandler.GetCampaigns)
 
 	router.Run()
 
