@@ -44,20 +44,18 @@ func main() {
 	userHandler := handler.NewUserHandler(userService, authService)
 
 	campaignRepository := campaign.NewRepository(db)
+	campaignService := campaign.NewService(campaignRepository)
 
-	campaigns, err := campaignRepository.FindByCampaignID(2)
+	campaigns, err := campaignService.FindCampaigns(3)
 
+	fmt.Println(len(campaigns))
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(1)
 	} else {
-		fmt.Println(campaigns)
-
-		if len(campaigns.CampaignImages) > 0 {
-			fmt.Println(campaigns.CampaignImages[0].FileName)
+		for _, campaign := range campaigns {
+			fmt.Println(campaign.Name)
 		}
 	}
-
-	userService.SaveAvatar(1, "images/1-profile.png")
 
 	router := gin.Default()
 
