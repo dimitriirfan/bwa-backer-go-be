@@ -8,8 +8,8 @@ type CampaignFormatter struct {
 	Name             string `json:"name"`
 	ShortDescription string `json:"short_description"`
 	ImageURL         string `json:"image_url"`
-	GoalAmmount      int    `json:"goal_amount"`
-	CurrentAmmount   int    `json:"current_amount"`
+	GoalAmount       int    `json:"goal_amount"`
+	CurrentAmount    int    `json:"current_amount"`
 	Slug             string `json:"slug"`
 }
 
@@ -19,8 +19,8 @@ type CampaignDetailFormatter struct {
 	ShortDescription string                   `json:"short_description"`
 	Description      string                   `json:"descrtiption"`
 	ImageURL         string                   `json:"image_url"`
-	GoalAmmount      int                      `json:"goal_amount"`
-	CurrentAmmount   int                      `json:"current_amount"`
+	GoalAmount       int                      `json:"goal_amount"`
+	CurrentAmount    int                      `json:"current_amount"`
 	UserID           int                      `json:"user_id"`
 	Slug             string                   `json:"slug"`
 	Perks            []string                 `json:"perks"`
@@ -44,8 +44,8 @@ func FormatCampaign(campaign Campaign) CampaignFormatter {
 		UserID:           campaign.UserID,
 		Name:             campaign.Name,
 		ShortDescription: campaign.ShortDescription,
-		GoalAmmount:      campaign.GoalAmmount,
-		CurrentAmmount:   campaign.CurrentAmmount,
+		GoalAmount:       campaign.GoalAmount,
+		CurrentAmount:    campaign.CurrentAmount,
 		Slug:             campaign.Slug,
 		ImageURL:         "",
 	}
@@ -72,8 +72,8 @@ func FormatCampaignDetail(campaign Campaign) CampaignDetailFormatter {
 		Name:             campaign.Name,
 		ShortDescription: campaign.ShortDescription,
 		Description:      campaign.Description,
-		GoalAmmount:      campaign.GoalAmmount,
-		CurrentAmmount:   campaign.CurrentAmmount,
+		GoalAmount:       campaign.GoalAmount,
+		CurrentAmount:    campaign.CurrentAmount,
 		UserID:           campaign.UserID,
 		Slug:             campaign.Slug,
 		Perks:            []string{},
