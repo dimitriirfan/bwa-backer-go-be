@@ -70,10 +70,10 @@ func (h *userHandler) Login(c *gin.Context) {
 	}
 
 	loggedinUser, err := h.userService.Login(input)
-
 	if err != nil {
 		errors := helper.FormatError(err)
 		errorMessage := gin.H{"errors": errors}
+
 		response := helper.APIResponse("Login account failed", http.StatusUnprocessableEntity, "error", errorMessage)
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
