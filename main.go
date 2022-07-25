@@ -5,6 +5,7 @@ import (
 	"backer/campaign"
 	"backer/handler"
 	"backer/helper"
+	"backer/payment"
 	"backer/transaction"
 	"backer/user"
 	"fmt"
@@ -45,11 +46,12 @@ func main() {
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
 	campaignService := campaign.NewService(campaignRepository)
-	transactionService := transaction.NewService(transactionRepository, campaignRepository)
+	paymentService := payment.NewService()
+	transactionService := transaction.NewService(transactionRepository, campaignRepository, paymentService)
 
 	userHandler := handler.NewUserHandler(userService, authService)
 	campaignHandler := handler.NewCampaignHandler(campaignService)
-	transactionHandler := handler.NewTransactionHandler(transactionService)
+	transactionHandler := handler.NewTransactionHandler(transactionService, campaignService)
 
 	router := gin.Default()
 	router.Static("/images", "./images")
@@ -69,6 +71,7 @@ func main() {
 
 	api.GET("/campaigns/:id/transactions", authMiddleware(authService, userService), transactionHandler.GetCampaignTransactions)
 	api.GET("/transactions", authMiddleware(authService, userService), transactionHandler.GetUserTransactions)
+	api.POST("/transactions", authMiddleware(authService, userService), transactionHandler.CreateTransaction)
 
 	router.Run()
 

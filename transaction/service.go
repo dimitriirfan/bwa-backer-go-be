@@ -2,23 +2,27 @@ package transaction
 
 import (
 	"backer/campaign"
+	"backer/payment"
 	"errors"
 )
 
 type Service interface {
 	GetTransactionsByCampaignID(input GetCampaignTransactionsInput) ([]Transaction, error)
 	GetTransactionByUserID(input GetUserTransactionsInput) ([]Transaction, error)
+	CreateTransaction(input CreateTransactionInput) (Transaction, error)
 }
 
 type service struct {
 	repository         Repository
 	campaignRepository campaign.Repository
+	paymentService     payment.Service
 }
 
-func NewService(repository Repository, campaignRepository campaign.Repository) *service {
+func NewService(repository Repository, campaignRepository campaign.Repository, paymentService payment.Service) *service {
 	return &service{
 		repository:         repository,
 		campaignRepository: campaignRepository,
+		paymentService:     paymentService,
 	}
 }
 
@@ -55,4 +59,41 @@ func (s *service) GetTransactionByUserID(input GetUserTransactionsInput) ([]Tran
 	}
 
 	return transactions, nil
+}
+
+func (s *service) CreateTransaction(input CreateTransactionInput) (Transaction, error) {
+
+	transaction := Transaction{
+		CampaignID: input.CampaignID,
+		Amount:     input.Amount,
+		UserID:     input.User.ID,
+		Status:     "pending",
+	}
+
+	newTransaction, err := s.repository.Save(transaction)
+
+	if err != nil {
+		return newTransaction, err
+	}
+
+	paymentTransaction := payment.Transaction{
+		ID:     newTransaction.ID,
+		Amount: newTransaction.Amount,
+	}
+
+	paymentURL, err := s.paymentService.GetPaymentURL(paymentTransaction, input.User)
+
+	if err != nil {
+		return newTransaction, err
+	}
+
+	newTransaction.PaymentURL = paymentURL
+
+	newTransaction, err = s.repository.Update(newTransaction)
+
+	if err != nil {
+		return newTransaction, err
+	}
+
+	return newTransaction, nil
 }

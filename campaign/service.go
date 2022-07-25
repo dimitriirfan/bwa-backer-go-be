@@ -52,6 +52,10 @@ func (s *service) GetCampaignByID(input GetCampaignDetailInput) (Campaign, error
 		return campaign, err
 	}
 
+	if campaign.ID == 0 {
+		return campaign, errors.New("campaign not found")
+	}
+
 	return campaign, nil
 }
 

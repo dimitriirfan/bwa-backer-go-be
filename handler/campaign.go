@@ -25,7 +25,10 @@ func (h *campaignHandler) GetCampaigns(c *gin.Context) {
 	campaigns, err := h.service.GetCampaigns(userID)
 
 	if err != nil {
-		response := helper.APIResponse("Error to get campaigns", http.StatusBadRequest, "error", nil)
+		errors := helper.FormatError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Error to get campaigns", http.StatusBadRequest, "error", errorMessage)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
@@ -41,7 +44,10 @@ func (h *campaignHandler) GetCampaign(c *gin.Context) {
 	err := c.ShouldBindUri(&input)
 
 	if err != nil {
-		response := helper.APIResponse("Failed to get detail campaign", http.StatusBadRequest, "error", nil)
+		errors := helper.FormatError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Campaign not found", http.StatusBadRequest, "error", errorMessage)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
@@ -49,7 +55,8 @@ func (h *campaignHandler) GetCampaign(c *gin.Context) {
 	campaignDetail, err := h.service.GetCampaignByID(input)
 
 	if err != nil {
-		response := helper.APIResponse("Failed to get detail campaign", http.StatusBadRequest, "error", nil)
+
+		response := helper.APIResponse("Failed to get detail campaign", http.StatusNotFound, "error", gin.H{})
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
@@ -62,7 +69,6 @@ func (h *campaignHandler) CreateCampaign(c *gin.Context) {
 	var input campaign.CreateCampaignInput
 
 	err := c.ShouldBindJSON(&input)
-	fmt.Println(err)
 
 	if err != nil {
 		errors := helper.FormatError(err)
@@ -80,7 +86,10 @@ func (h *campaignHandler) CreateCampaign(c *gin.Context) {
 	newCampaign, err := h.service.CreateCampaign(input)
 
 	if err != nil {
-		response := helper.APIResponse("Failed to get detail campaign", http.StatusBadRequest, "error", nil)
+		errors := helper.FormatError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Failed to get detail campaign", http.StatusBadRequest, "error", errorMessage)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
