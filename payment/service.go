@@ -1,6 +1,7 @@
 package payment
 
 import (
+	"backer/campaign"
 	"backer/user"
 	"os"
 	"strconv"
@@ -12,10 +13,12 @@ type Service interface {
 	GetPaymentURL(transaction Transaction, user user.User) (string, error)
 }
 
-type service struct{}
+type service struct {
+	campaignRepository campaign.Repository
+}
 
-func NewService() *service {
-	return &service{}
+func NewService(campaignRepository campaign.Repository) *service {
+	return &service{campaignRepository}
 }
 
 func (s *service) GetPaymentURL(transaction Transaction, user user.User) (string, error) {

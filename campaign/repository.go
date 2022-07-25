@@ -7,7 +7,7 @@ import (
 type Repository interface {
 	FindAll() ([]Campaign, error)
 	FindByUserID(userID int) ([]Campaign, error)
-	FindByCampaignID(campaignID int) (Campaign, error)
+	FindByID(campaignID int) (Campaign, error)
 	Save(campaign Campaign) (Campaign, error)
 	Update(campaign Campaign) (Campaign, error)
 	CreateImage(campaignImage CampaignImage) (CampaignImage, error)
@@ -45,7 +45,7 @@ func (r *repository) FindByUserID(userID int) ([]Campaign, error) {
 	return campaigns, nil
 }
 
-func (r *repository) FindByCampaignID(campaignID int) (Campaign, error) {
+func (r *repository) FindByID(campaignID int) (Campaign, error) {
 	var campaign Campaign
 
 	err := r.db.Where("ID = ?", campaignID).Preload("User").Preload("CampaignImages").Find(&campaign).Error
